@@ -1,21 +1,21 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/dist
-/tmp
-/out-tsc
+UI/dist
+UI/tmp
+UI/out-tsc
 # Only exists if Bazel was run
-/bazel-out
+UI/bazel-out
 
 # dependencies
-/node_modules
+UI/node_modules
 
 # profiling files
 chrome-profiler-events*.json
 speed-measure-plugin*.json
 
 # IDEs and editors
-/.idea
+UI/.idea
 .project
 .classpath
 .c9/
@@ -32,10 +32,10 @@ speed-measure-plugin*.json
 .history/*
 
 # misc
-/.sass-cache
-/connect.lock
-/coverage
-/libpeerconnection.log
+UI/.sass-cache
+UI/connect.lock
+UI/coverage
+UI/libpeerconnection.log
 npm-debug.log
 yarn-error.log
 testem.log

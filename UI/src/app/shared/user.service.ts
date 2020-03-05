@@ -25,10 +25,24 @@ export class UserService {
     })
   }
 
-  // GetUserByEmail(email: string) {
-  //   this.usersRef = this.db.list('random',
-  //   ref => ref.orderByChild('use_email').equalTo(eyeColor));
-  // }
+  GetUserByEmail(email: string) {
+    this.db.ref('companies').orderByChild('owner').equalTo(id)
+    .once('value')
+    .then(snapshot => {
+      const records = snapshot.val();
+      console.log(`Companies whose owner id is ${id}: `, records);
+    })
+    .catch(error => console.log(error));
+
+
+
+    this.usersRef = this.db.list('/user-list', ref => {
+      query: {
+          orderByChild: 'authProvider',
+          equalTo: email
+      }
+    }).valueChanges();
+  }
 
   /* Get user */
   GetUser(id: string) {
