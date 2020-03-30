@@ -6,12 +6,15 @@ import pandas as pd
 from flask import jsonify
 from firebase import firebase
 from pandas.io.json import json_normalize
+import spacy
+import os
 
 
 app = Flask(__name__)
-@app.route('/matchInterest')
+@app.route('/matchInterest', methods=['GET'])
 def matchInterest():
     module_url = "https://tfhub.dev/google/universal-sentence-encoder/4"
+    #model_spacy = "".join([os.path.dirname(os.path.abspath(__file__)) , '/model'])
     model = hub.load(module_url)
     user = request.args.get('user')
     print('user :::::::::: ',user)
@@ -22,6 +25,8 @@ def matchInterest():
     #         'Interest_3':['c++', 'legged race', 'angel investor', 'Mini golf', 'Adopt a star', 'Watch a sunset', 'all things related to cats', 'connecting with kindred spirits', 'research and discovery', 'Data Science']}
     user_list = callFirebase()
     data_local = pd.DataFrame.from_dict(user_list)
+    data_local = data_local.transpose()
+    data_local = data_local.reset_index()
     print('data------------------------->  ',data_local.head())
     return find_a_match(int(user) , data_local,model)
 
@@ -29,8 +34,10 @@ def callFirebase():
     fb = firebase.FirebaseApplication("https://interestmat.firebaseio.com/",None)
     data = fb.get("/user-list",'')
     return data
+
 def embed(input,model):
-  return model(input)
+    print('input ::::::::::   >>>>>>>>>> ',input)
+    return model(input)
 
 def get_embeddings(person1, person2,model):
     person1_embeddings = embed(person1,model)
@@ -54,15 +61,15 @@ def calculate_corr_value(person1, person2,model):
 
 def find_a_match(person_id , data_local,model):
     
-    person1_list = data_local.iloc[person_id, 2:].values.tolist()
+    person1_list = data_local.iloc[person_id, 3]
     best_match_value = float('inf')
     best_match_index = 0
     result=[]
     res={}
-    for j in range (10):
+    for j in range(len(data_local)):
         print('in JJJJJ a match :::::',j)
         if person_id != j:
-            person2_list = data_local.iloc[j, 2:].values.tolist()
+            person2_list = data_local.iloc[j, 3]
             corr = calculate_corr_value(person1_list, person2_list,model)
             result.append("Match score bet person {} and {} is {}".format(person_id, j, corr))
             if corr < best_match_value:
