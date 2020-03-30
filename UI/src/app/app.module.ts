@@ -18,6 +18,9 @@ import { UserListComponent } from './components/user-list/user-list.component';
 import { UserService } from './shared/user.service';
 import { LoginComponent } from './components/login/login.component';
 
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AuthService } from './services/auth.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,9 +39,10 @@ import { LoginComponent } from './components/login/login.component';
     ReactiveFormsModule,
     AngularMaterialModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFireDatabaseModule
+    AngularFireDatabaseModule,
+    AngularFireAuthModule
   ],
-  providers: [EventService, UserService],
+  providers: [EventService, UserService, AuthService],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
