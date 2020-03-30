@@ -17,6 +17,7 @@ import { AddUserComponent } from './components/add-user/add-user.component';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { UserService } from './shared/user.service';
 import { LoginComponent } from './components/login/login.component';
+import { PythonApiService } from './shared/python-api.service';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,7 @@ import { LoginComponent } from './components/login/login.component';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule
   ],
-  providers: [EventService, UserService],
+  providers: [EventService, UserService, PythonApiService],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

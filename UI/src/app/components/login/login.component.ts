@@ -3,6 +3,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material';
 import { UserService } from './../../shared/user.service';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { EventService } from 'src/app/shared/event.service';
 
 @Component({
   selector: 'app-login',
@@ -15,6 +16,7 @@ export class LoginComponent implements OnInit {
   selectable = true;
   removable = true;
   addOnBlur = true;
+  users: any = [];
   @ViewChild('chipList', {static: false}) chipList;
   @ViewChild('resetUserForm', {static: false}) myNgForm;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -29,7 +31,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     public fb: FormBuilder,
-    private userApi: UserService
+    private userApi: UserService,
+    private eventApi: EventService
   ) { }
 
   /* Reactive user form */
@@ -41,9 +44,9 @@ export class LoginComponent implements OnInit {
   }
 
   /* Get errors */
-  public handleError = (controlName: string, errorName: string) => {
-    return this.userForm.controls[controlName].hasError(errorName);
-  }
+  // public handleError = (controlName: string, errorName: string) => {
+  //   return this.userForm.controls[controlName].hasError(errorName);
+  // }
 
   /* Reset form */
   resetForm() {
@@ -56,9 +59,20 @@ export class LoginComponent implements OnInit {
   /* Submit user */
   submitUser() {
     if (this.userForm.valid){
-      this.userApi.GetUserByEmail(this.userForm.value)
+      this.userApi.GetUserByEmail(this.userForm.value.user_email)
+      .snapshotChanges().subscribe(events => {
+          events.forEach(item => {
+            let a = item.payload.toJSON();
+            console.log(a);
+            a['$key'] = item.key;
+            this.userApi.loggedInUser = a;
+            this.users.push(a);
+          });
+      });
       this.resetForm();
     }
+
+    console.log(this.userApi.loggedInUser.$key);
   }
 
 }

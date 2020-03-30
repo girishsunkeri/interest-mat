@@ -9,6 +9,7 @@ import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angula
 export class UserService {
   usersRef: AngularFireList<any>;
   userRef: AngularFireObject<any>;
+  loggedInUser: any =  {};
 
   constructor(private db: AngularFireDatabase) {}
 
@@ -26,22 +27,8 @@ export class UserService {
   }
 
   GetUserByEmail(email: string) {
-    this.db.ref('companies').orderByChild('owner').equalTo(id)
-    .once('value')
-    .then(snapshot => {
-      const records = snapshot.val();
-      console.log(`Companies whose owner id is ${id}: `, records);
-    })
-    .catch(error => console.log(error));
-
-
-
-    this.usersRef = this.db.list('/user-list', ref => {
-      query: {
-          orderByChild: 'authProvider',
-          equalTo: email
-      }
-    }).valueChanges();
+    this.usersRef = this.db.list('/user-list', ref => ref.orderByChild('user_email').equalTo(email));
+    return this.usersRef;
   }
 
   /* Get user */
