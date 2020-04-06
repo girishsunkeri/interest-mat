@@ -19,6 +19,9 @@ import { UserService } from './shared/user.service';
 import { LoginComponent } from './components/login/login.component';
 import { PythonApiService } from './shared/python-api.service';
 
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AuthService } from './services/auth.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,9 +40,11 @@ import { PythonApiService } from './shared/python-api.service';
     ReactiveFormsModule,
     AngularMaterialModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFireDatabaseModule
+    AngularFireDatabaseModule,
+    AngularFireAuthModule
   ],
-  providers: [EventService, UserService, PythonApiService],
+
+  providers: [EventService, UserService, AuthService, PythonApiService],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
