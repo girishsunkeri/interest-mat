@@ -34,6 +34,7 @@ export class AuthService {
       .createUserWithEmailAndPassword(email, password)
       .then(value => {
         console.log('Success!', value);
+        this.redirectToConferencePage();
       })
       .catch(err => {
         this.changeMessage(err.message);

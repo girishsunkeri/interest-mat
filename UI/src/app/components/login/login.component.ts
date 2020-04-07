@@ -12,21 +12,7 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-
-  visible = true;
-  selectable = true;
-  removable = true;
-  addOnBlur = true;
-  users: any = [];
-  @ViewChild('chipList', {static: false}) chipList;
-  @ViewChild('resetUserForm', {static: false}) myNgForm;
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  selectedBindingType: string;
   userForm: FormGroup;
-  BindingType: any = ['Paperback', 'Case binding', 'Perfect binding', 'Saddle stitch binding', 'Spiral binding'];
-  opened = true;
-  email: string;
-  password: string;
   error = '';
 
   ngOnInit() {
@@ -36,8 +22,6 @@ export class LoginComponent implements OnInit {
 
   constructor(
     public fb: FormBuilder,
-    private userApi: UserService,
-    private eventApi: EventService,
     private authService: AuthService
   ) { }
 
