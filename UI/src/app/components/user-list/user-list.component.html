@@ -15,7 +15,7 @@
               </mat-card-header>
               <mat-card-content>
                 <mat-chip-list>
-                    <mat-chip *ngFor="let interest of objectValues(user.user_interests)" color="primary" selected>
+                    <mat-chip *ngFor="let interest of user.user_interests ? objectValues(user.user_interests) : []" color="primary" selected>
                       {{interest}}
                     </mat-chip>
                   </mat-chip-list>

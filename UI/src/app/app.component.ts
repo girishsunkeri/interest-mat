@@ -1,6 +1,7 @@
 import { Component, ViewChild, HostListener, OnInit } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { AuthService } from './services/auth.service';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -9,12 +10,13 @@ import { AuthService } from './services/auth.service';
 })
 
 export class AppComponent implements OnInit {
-  opened = true;
+  opened = false;
   email: string;
   password: string;
   error: string;
+  currentRoute: string;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   signup() {
     var response = this.authService.signup(this.email, this.password);
@@ -34,8 +36,15 @@ export class AppComponent implements OnInit {
   @ViewChild('sidenav', {static: false}) sidenav: MatSidenav;
 
   ngOnInit() {
+    this.router.events.subscribe(polo => {
+      console.log(polo);
+      if (polo instanceof NavigationEnd ) {
+        this.currentRoute = polo.url;
+      }
+    });
+    console.log(this.router.url);
     this.authService.user.subscribe(val => {
-      if (!val) {
+      if (!val && this.currentRoute !== '/register') {
         this.redirectToLoginPage();
       }
     });

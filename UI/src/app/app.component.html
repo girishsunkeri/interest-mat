@@ -34,10 +34,24 @@
   </div> -->
 
   <mat-toolbar color="primary" class="header">
-    <div>All Events</div>
-    <span class="nav-tool-items">
-      <mat-icon (click)="sidenav.toggle()" class="hamburger">menu</mat-icon>
-    </span>
+    <span *ngIf="(authService.user | async)" class="nav-tool-items">
+        <mat-icon (click)="sidenav.toggle()" class="hamburger">menu</mat-icon>
+      </span>
+    <div *ngIf="(authService.user | async)" align="right">
+      <!-- Welcome {{ (authService.user | async)?.user_first_name }}! -->
+      <button mat-flat-button color="warn" (click)="logout()">
+        Logout
+      </button>
+    </div>
+    <div *ngIf="!(authService.user | async)" align="right">
+      <button mat-flat-button color="warn" (click)="signup()" routerLink="/register">
+          Signup
+      </button>
+      &nbsp;
+      <button mat-flat-button color="warn" (click)="login()" routerLink="/login">
+        Login
+      </button>
+      </div>
   </mat-toolbar>
 
   <mat-sidenav-container>

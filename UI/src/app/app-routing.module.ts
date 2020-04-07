@@ -6,7 +6,7 @@ import { EditEventComponent } from './components/edit-event/edit-event.component
 import { AddUserComponent } from './components/add-user/add-user.component';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { LoginComponent } from './components/login/login.component';
-import { RegisterComponent } from './register/register.component';
+import { RegisterComponent } from './components/register/register.component';
 
 
 const routes: Routes = [

@@ -64,11 +64,11 @@
               <!-- User name -->
               <mat-form-field class="full-width">
                     <mat-label>First Name</mat-label>
-                    <input  matInput  placeholder="First name"  formControlName="fname"  required>
+                    <input  matInput  placeholder="First name"  formControlName="user_first_name"  required>
                  </mat-form-field>
                  <mat-form-field class="full-width">
                     <mat-label>Last Name</mat-label>
-                    <input  matInput  placeholder="Last Name" formControlName="lname"  required>
+                    <input  matInput  placeholder="Last Name" formControlName="user_last_name"  required>
                  </mat-form-field>
                  <mat-form-field class="full-width">
                     <mat-label>Address</mat-label>
@@ -76,12 +76,27 @@
                  </mat-form-field>
                  <mat-form-field class="full-width">
                     <mat-label>Email</mat-label>
-                    <input  matInput  placeholder="Email" formControlName="email">
+                    <input  matInput  placeholder="Email" formControlName="user_email">
                  </mat-form-field>
                  <mat-form-field class="full-width">
                     <mat-label>Password</mat-label>
                     <input type="password" matInput  placeholder="Password"  formControlName="password">
                  </mat-form-field>
+                 <mat-form-field class="multiple-items">
+                    <mat-chip-list #chipList>
+                        <mat-chip *ngFor="let interest of interestArray" [selectable]="selectable" [removable]="removable"
+                        (removed)="remove(interest)">
+                        {{interest}}
+                        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                        </mat-chip>
+                        <input placeholder="Add interests" [matChipInputFor]="chipList"
+                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                        (matChipInputTokenEnd)="add($event)">
+                    </mat-chip-list>
+                    <i class="material-icons tooltip-info" matTooltip="Enter item name and press enter to add multiple items">
+                        info
+                    </i>
+                </mat-form-field>
             </div>
           </mat-card>
      

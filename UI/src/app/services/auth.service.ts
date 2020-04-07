@@ -10,6 +10,8 @@ export class AuthService {
   user: Observable<firebase.User>;
   private error = new BehaviorSubject('');
   currentError = this.error.asObservable();
+  private userCreatedSource = new BehaviorSubject(false);
+  userCreated = this.userCreatedSource.asObservable();
   private userDetails: firebase.User = null;
 
   constructor(private _firebaseAuth: AngularFireAuth, private router: Router) {
@@ -34,7 +36,8 @@ export class AuthService {
       .createUserWithEmailAndPassword(email, password)
       .then(value => {
         console.log('Success!', value);
-        this.redirectToConferencePage();
+        this.userCreatedSource.next(true);
+        //this.redirectToConferencePage();
       })
       .catch(err => {
         this.changeMessage(err.message);
