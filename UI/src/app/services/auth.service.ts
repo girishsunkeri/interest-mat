@@ -3,11 +3,13 @@ import { Router } from "@angular/router";
 import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class AuthService {
   user: Observable<firebase.User>;
-  error: string;
+  private error = new BehaviorSubject('');
+  currentError = this.error.asObservable();
   private userDetails: firebase.User = null;
 
   constructor(private _firebaseAuth: AngularFireAuth, private router: Router) {
@@ -34,7 +36,7 @@ export class AuthService {
         console.log('Success!', value);
       })
       .catch(err => {
-        this.error = err.message;
+        this.changeMessage(err.message);
         console.log('Something went wrong:',err.message);
       });
   }
@@ -45,11 +47,16 @@ export class AuthService {
       .signInWithEmailAndPassword(email, password)
       .then(value => {
         console.log('Nice, it worked!');
+        this.redirectToConferencePage();
       })
       .catch(err => {
-        this.error = err.message;
+        this.changeMessage(err.message);
         console.log('Something went wrong:',err.message);
       });
+  }
+
+  changeMessage(message: string) {
+    this.error.next(message);
   }
 
   // logout() {
@@ -74,9 +81,14 @@ export class AuthService {
   }
   logout() {
     this._firebaseAuth.auth.signOut()
-      .then((res) => this.router.navigate(['/add-user']));
+      .then((res) => this.router.navigate(['/login']));
   }
+
+  redirectToConferencePage() {
+    this.router.navigate(['/events-list']);
+  }
+
   redirectToLoginPage() {
-    this.router.navigate(['/add-user']);
+    this.router.navigate(['/login']);
   }
 }

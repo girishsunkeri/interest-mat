@@ -4,6 +4,7 @@ import { MatChipInputEvent } from '@angular/material';
 import { UserService } from './../../shared/user.service';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { EventService } from 'src/app/shared/event.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -23,16 +24,21 @@ export class LoginComponent implements OnInit {
   selectedBindingType: string;
   userForm: FormGroup;
   BindingType: any = ['Paperback', 'Case binding', 'Perfect binding', 'Saddle stitch binding', 'Spiral binding'];
+  opened = true;
+  email: string;
+  password: string;
+  error = '';
 
-  ngOnInit() { 
-    this.userApi.GetUserList();
+  ngOnInit() {
+    this.authService.currentError.subscribe(errorMessage => this.error = errorMessage);
     this.submitUserForm();
   }
 
   constructor(
     public fb: FormBuilder,
     private userApi: UserService,
-    private eventApi: EventService
+    private eventApi: EventService,
+    private authService: AuthService
   ) { }
 
   /* Reactive user form */
@@ -57,22 +63,28 @@ export class LoginComponent implements OnInit {
   }
 
   /* Submit user */
-  submitUser() {
-    if (this.userForm.valid){
-      this.userApi.GetUserByEmail(this.userForm.value.user_email)
-      .snapshotChanges().subscribe(events => {
-          events.forEach(item => {
-            let a = item.payload.toJSON();
-            console.log(a);
-            a['$key'] = item.key;
-            this.userApi.loggedInUser = a;
-            this.users.push(a);
-          });
-      });
-      this.resetForm();
-    }
+  // submitUser() {
+  //   if (this.userForm.valid){
+  //     this.userApi.GetUserByEmail(this.userForm.value.user_email)
+  //     .snapshotChanges().subscribe(events => {
+  //         events.forEach(item => {
+  //           let a = item.payload.toJSON();
+  //           console.log(a);
+  //           a['$key'] = item.key;
+  //           this.userApi.loggedInUser = a;
+  //           this.users.push(a);
+  //         });
+  //     });
+  //     this.resetForm();
+  //   }
 
-    console.log(this.userApi.loggedInUser.$key);
+  //   console.log(this.userApi.loggedInUser.$key);
+  // }
+
+  login() {
+    if (this.userForm.valid) {
+      this.authService.login(this.userForm.value.user_email, this.userForm.value.user_password);
+    }
   }
 
 }

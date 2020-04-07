@@ -1,6 +1,6 @@
 <!-- Toolbar -->
 
-<div *ngIf="!(authService.user | async)">
+ <!-- <div *ngIf="!(authService.user | async)">
 
   <mat-toolbar color="primary" class="header">
     <div>NetMash</div>
@@ -17,21 +17,21 @@
         Login
       </button>
     </div>
-<!--      <div class='form-error-message'>{{error}}</div>-->
+      <div class='form-error-message'>{{error}}</div>
   </mat-toolbar>
-</div>
+</div>  -->
 
 <!--<div *ngIf="!(authService.user | async)?redirectToLoginPage():''">-->
 
 <!--</div>-->
 
-<div *ngIf="authService.user | async">
-  <div style="background-color:DodgerBlue;" align="right">
+
+  <!-- <div style="background-color:DodgerBlue;" align="right">
     Welcome {{ (authService.user | async)?.email }}!
     <button (click)="logout()">
       Logout
     </button>
-  </div>
+  </div> -->
 
   <mat-toolbar color="primary" class="header">
     <div>All Events</div>
@@ -42,7 +42,7 @@
 
   <mat-sidenav-container>
     <!-- Sidenav -->
-    <mat-sidenav #sidenav [mode]="isBiggerScreen() ? 'over' : 'side'" [(opened)]="opened" [fixedInViewport]="true"
+    <mat-sidenav *ngIf="(authService.user | async)" #sidenav [mode]="isBiggerScreen() ? 'over' : 'side'" [(opened)]="opened" [fixedInViewport]="true"
       [fixedTopGap]>
       <mat-nav-list>
           <a style="visibility:hidden" mat-list-item routerLinkActive="active" routerLink="/add-book">
@@ -59,6 +59,9 @@
 <!--        </a>-->
         <a mat-list-item routerLinkActive="active" routerLink="/user-list">
           <mat-icon>format_list_bulleted</mat-icon> View Users
+        </a>
+        <a mat-list-item routerLinkActive="active" (click)="logout()">
+          <mat-icon>format_list_bulleted</mat-icon> Logout
         </a>
       </mat-nav-list>
     </mat-sidenav>

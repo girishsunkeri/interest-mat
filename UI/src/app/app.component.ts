@@ -14,17 +14,11 @@ export class AppComponent implements OnInit {
   password: string;
   error: string;
 
-  constructor(public authService: AuthService) {}
+  constructor(private authService: AuthService) {}
 
   signup() {
     var response = this.authService.signup(this.email, this.password);
-    this.error = this.authService.error;
-    this.email = this.password = '';
-  }
-
-  login() {
-    var response = this.authService.login(this.email, this.password);
-    this.error = this.authService.error;
+    //this.error = this.authService.error;
     this.email = this.password = '';
   }
 
@@ -40,13 +34,11 @@ export class AppComponent implements OnInit {
   @ViewChild('sidenav', {static: false}) sidenav: MatSidenav;
 
   ngOnInit() {
-    if (window.innerWidth < 768) {
-      //this.sidenav.fixedTopGap = 55;
-      //this.opened = false;
-    } else {
-      //this.sidenav.fixedTopGap = 55;
-      //this.opened = true;
-    }
+    this.authService.user.subscribe(val => {
+      if (!val) {
+        this.redirectToLoginPage();
+      }
+    });
   }
 
   @HostListener('window:resize', ['$event'])
