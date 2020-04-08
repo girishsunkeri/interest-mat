@@ -34,7 +34,7 @@
   </div> -->
 
   <mat-toolbar color="primary" class="header">
-    <div *ngIf="!isBiggerScreen()">NetMash</div>
+    <div *ngIf="!isBiggerScreen() || !(authService.user | async)">NetMash</div>
     <span *ngIf="(authService.user | async)" class="nav-tool-items">
         <mat-icon (click)="sidenav.toggle()" class="hamburger">menu</mat-icon>
       </span>
