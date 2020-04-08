@@ -40,8 +40,8 @@ export class RegisterComponent implements OnInit {
   addAdditionalInfo() {
     if (this.userForm.valid){
       this.userApi.GetUserList();
-      this.userApi.AddUser(this.userForm.value)
-      this.resetForm();
+      this.userApi.AddUser(this.userForm.value);
+      this.authService.redirectToConferencePage();
     }
   }
 
