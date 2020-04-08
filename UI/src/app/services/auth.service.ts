@@ -4,6 +4,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs';
+import { UserService } from './../shared/user.service';
 
 @Injectable()
 export class AuthService {
@@ -12,16 +13,18 @@ export class AuthService {
   currentError = this.error.asObservable();
   private userCreatedSource = new BehaviorSubject(false);
   userCreated = this.userCreatedSource.asObservable();
-  private userDetails: firebase.User = null;
+  userDetails: firebase.User = null;
 
-  constructor(private _firebaseAuth: AngularFireAuth, private router: Router) {
+  constructor(private _firebaseAuth: AngularFireAuth, private router: Router,
+              private userApi: UserService) {
+
     this.user = _firebaseAuth.authState;
 
     this.user.subscribe(
       (user) => {
         if (user) {
           this.userDetails = user;
-          console.log(this.userDetails);
+          this.fetchUserdetails(user.email);
         }
         else {
           this.userDetails = null;
@@ -57,6 +60,18 @@ export class AuthService {
         this.changeMessage(err.message);
         console.log('Something went wrong:',err.message);
       });
+  }
+
+  fetchUserdetails(email) {
+    this.userApi.GetUserByEmail(email)
+        .snapshotChanges().subscribe(events => {
+            events.forEach(item => {
+              let a = item.payload.toJSON();
+              this.userDetails.first_name = a.user_first_name;
+              this.userDetails.last_name = a.user_last_name;
+              console.log(a);
+            });
+        });
   }
 
   changeMessage(message: string) {
