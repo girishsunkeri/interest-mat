@@ -22,6 +22,7 @@ import { PythonApiService } from './shared/python-api.service';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AuthService } from './services/auth.service';
 import { RegisterComponent } from './components/register/register.component';
+import { UserInterestsComponent } from './components/user-interests/user-interests.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { RegisterComponent } from './components/register/register.component';
     AddUserComponent,
     UserListComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    UserInterestsComponent
   ],
   imports: [
     BrowserModule,
