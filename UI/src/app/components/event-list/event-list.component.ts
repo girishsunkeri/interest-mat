@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Event } from './../../shared/event';
+import { Router } from "@angular/router";
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { EventService } from './../../shared/event.service';
 
@@ -20,7 +21,7 @@ export class EventListComponent {
     'event_tags'
   ];
 
-  constructor(private eventApi: EventService) {
+  constructor(private eventApi: EventService, private router: Router) {
     this.eventApi.GetEventList()
     .snapshotChanges().subscribe(events => {
         events.forEach(item => {
@@ -50,5 +51,9 @@ export class EventListComponent {
       this.dataSource.data = data;
       this.eventApi.DeleteEvent(e.$key);
     }
+  }
+
+  enrollEvent(e) {
+    this.router.navigate(['/enroll-event/'+e.$key]);
   }
 }

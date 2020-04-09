@@ -64,11 +64,13 @@ export class AuthService {
 
   fetchUserdetails(email) {
     this.userApi.GetUserByEmail(email)
-        .snapshotChanges().subscribe(events => {
-            events.forEach(item => {
+        .snapshotChanges().subscribe(users => {
+            users.forEach(item => {
               let a = item.payload.toJSON();
+              this.userDetails.id = item.key;
               this.userDetails.first_name = a.user_first_name;
               this.userDetails.last_name = a.user_last_name;
+              this.userDetails.interests = a.user_interests;
               console.log(a);
             });
         });
