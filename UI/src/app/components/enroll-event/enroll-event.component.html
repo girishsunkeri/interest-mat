@@ -1,7 +1,4 @@
 <!-- Title group  -->
-<!--<div *ngIf="isEnrolledEvent" class="alert alert-info">-->
-<!--  <strong>Info!</strong> Indicates a neutral informative change or action.-->
-<!--</div>-->
 <div *ngIf="isEnrolledEvent" class="alert">
   <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
   You have enrolled this event!
@@ -12,7 +9,7 @@
 </div>
 
 <!--<mat-card *ngFor="let event of events" class="example-card">-->
-<mat-card class="example-card">
+<mat-card class="example-card" *ngIf="eventData">
   <mat-card-header>
     <mat-card-title>{{eventData.event_name}}</mat-card-title>
     <mat-card-subtitle>{{eventData.event_location}}</mat-card-subtitle>

@@ -8,6 +8,9 @@ import {COMMA, ENTER} from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from '@angular/material';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {UserService} from "../../shared/user.service";
+import {User} from "../../shared/user";
+import {EnrollEvent} from "../../shared/enroll-event";
+import {Event} from "../../shared/event";
 
 @Component({
   selector: 'app-enroll-event',
@@ -16,9 +19,9 @@ import {UserService} from "../../shared/user.service";
 })
 export class EnrollEventComponent {
 
-  eventData: object;
+  eventData: Event;
   eventId: string;
-  userId: string;
+  loggedInUser: User;
   interestArray = [];
   selectable = true;
   removable = true;
@@ -44,18 +47,17 @@ export class EnrollEventComponent {
       ) {
 
     this.eventId = this.actRoute.snapshot.paramMap.get('id');
-    this.userId = this.authService.userDetails.id;
+    this.loggedInUser = this.authService.loggedInUser;
 
     /* Get event details*/
     this.eventApi.GetEvent(this.eventId).valueChanges().subscribe(data => {
-      this.eventData = data;
-      console.log(data);
+      this.eventData = <Event> data;
     });
 
     this.enrollEventApi.GetEnrolledEvents();
-    this.enrollEventApi.GetEnrolledEventsOfUser(this.userId).snapshotChanges().subscribe(events => {
+    this.enrollEventApi.GetEnrolledEventsOfUser(this.loggedInUser.$key).snapshotChanges().subscribe(events => {
       events.forEach(event => {
-        let a = event.payload.toJSON();
+        let a = <EnrollEvent> event.payload.toJSON();
         if(a.event_id == this.eventId) {
           this.isEnrolledEvent = true;
           this.interestArray = [];
@@ -68,7 +70,7 @@ export class EnrollEventComponent {
 
     /* add user interests to array*/
     if(!this.isEnrolledEvent) {
-      var interests = this.authService.userDetails.interests;
+      var interests = this.authService.loggedInUser.user_interests;
       if(interests) {
         this.interestArray = [];
         Object.values(interests).forEach(interest => {
@@ -81,7 +83,7 @@ export class EnrollEventComponent {
   enrollEventForm() {
     this.enrollForm = this.fb.group({
       event_id: [this.actRoute.snapshot.paramMap.get('id')],
-      user_id: [this.userId],
+      user_id: [this.loggedInUser.$key],
       user_interests: [this.interestArray, [Validators.required]]
     })
   }
