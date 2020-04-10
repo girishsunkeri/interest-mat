@@ -5,6 +5,7 @@ import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs';
 import { UserService } from './../shared/user.service';
+import {User} from "../shared/user";
 
 @Injectable()
 export class AuthService {
@@ -13,7 +14,7 @@ export class AuthService {
   currentError = this.error.asObservable();
   private userCreatedSource = new BehaviorSubject(false);
   userCreated = this.userCreatedSource.asObservable();
-  userDetails: firebase.User = null;
+  loggedInUser: User = null;
 
   constructor(private _firebaseAuth: AngularFireAuth, private router: Router,
               private userApi: UserService) {
@@ -23,11 +24,10 @@ export class AuthService {
     this.user.subscribe(
       (user) => {
         if (user) {
-          this.userDetails = user;
           this.fetchUserdetails(user.email);
         }
         else {
-          this.userDetails = null;
+          this.loggedInUser = null;
         }
       }
     );
@@ -67,10 +67,12 @@ export class AuthService {
         .snapshotChanges().subscribe(users => {
             users.forEach(item => {
               let a = item.payload.toJSON();
-              this.userDetails.id = item.key;
-              this.userDetails.first_name = a.user_first_name;
-              this.userDetails.last_name = a.user_last_name;
-              this.userDetails.interests = a.user_interests;
+              a['$key'] = item.key;
+              this.loggedInUser = <User>a;
+              // this.userDetails.id = item.key;
+              // this.userDetails.first_name = a.user_first_name;
+              // this.userDetails.last_name = a.user_last_name;
+              // this.userDetails.interests = a.user_interests;
               console.log(a);
             });
         });
@@ -94,7 +96,7 @@ export class AuthService {
   }
 
   isLoggedIn() {
-    if (this.userDetails == null ) {
+    if (this.loggedInUser == null ) {
       return false;
     } else {
       return true;

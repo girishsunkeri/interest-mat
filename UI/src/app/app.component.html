@@ -39,8 +39,8 @@
         <mat-icon (click)="sidenav.toggle()" class="hamburger">menu</mat-icon>
       </span>
     <div *ngIf="(authService.user | async)" align="right">
-       <span *ngIf="authService.userDetails.first_name && authService.userDetails.last_name">
-         {{ authService.userDetails.first_name + ' ' +authService.userDetails.last_name}}
+       <span *ngIf="authService.loggedInUser">
+         {{ authService.loggedInUser.user_first_name + ' ' +authService.loggedInUser.user_last_name}}
        </span>
       <button mat-flat-button color="warn" (click)="logout()">
         Logout
